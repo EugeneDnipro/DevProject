@@ -17,4 +17,8 @@ public class Note {
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "access")
+    @Enumerated(EnumType.STRING)
+    private AccessType access;
 }

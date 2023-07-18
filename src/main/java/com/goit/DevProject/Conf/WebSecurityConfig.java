@@ -3,6 +3,7 @@ package com.goit.DevProject.Conf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,32 +38,41 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/note/list");
-        return http.build();
-    }
+        http
+                .httpBasic(Customizer.withDefaults())//BasicAuthenticationFilter
+                .csrf(Customizer.withDefaults())
+                .authorizeHttpRequests((requests) -> {
+                            requests
+                                    .anyRequest()
+                                    .authenticated();
+                        }
+                )
+                .csrf(CsrfConfigurer::disable)
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutSuccessUrl("/note/list"));
 
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.build();
+
 //        http
-//                .httpBasic(Customizer.withDefaults())//BasicAuthenticationFilter
-//                .csrf(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
 //                .authorizeHttpRequests((requests) -> {
 //                            requests
-//                                    .requestMatchers("/actuator/**")
-//                                    .permitAll()
+//
+//                                    .requestMatchers(HttpMethod.GET, "/products", "/actuator/**").permitAll()
 //                                    .anyRequest()
 //                                    .authenticated();
 //                        }
 //                )
-//                .csrf(CsrfConfigurer::disable)
-//                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+//                .formLogin((form) -> form
+//                        .loginPage("/login")
+//                        .defaultSuccessUrl("/hello")
+//                        .permitAll()
+//                )
 //                .logout(LogoutConfigurer::permitAll);
 //
 //        return http.build();
-//    }
+
+    }
+
 
 }

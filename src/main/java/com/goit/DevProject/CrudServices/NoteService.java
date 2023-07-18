@@ -36,6 +36,7 @@ public class NoteService {
         Long id = note.getId();
         repository.getReferenceById(id).setTitle(note.getTitle());
         repository.getReferenceById(id).setContent(note.getContent());
+        repository.getReferenceById(id).setAccess(note.getAccess());
         repository.saveAndFlush(note);
     }
 

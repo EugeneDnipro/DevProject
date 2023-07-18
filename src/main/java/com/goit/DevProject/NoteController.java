@@ -41,7 +41,7 @@ public class NoteController {
         return "redirect:/note/list";
     }
 
-    @PostMapping("/new")
+    @PostMapping("/create")
     public String newNote(@ModelAttribute Note note, Model model) {
         model.addAttribute("note", note);
         noteService.add(note);
