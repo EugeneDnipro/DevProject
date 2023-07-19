@@ -1,5 +1,6 @@
 package com.goit.DevProject.CrudServices;
 
+import com.goit.DevProject.Entities.AccessType;
 import com.goit.DevProject.Entities.Note;
 import com.goit.DevProject.Repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,4 +47,17 @@ public class NoteService {
         }
         return repository.getReferenceById(id);
     }
+
+    public boolean isAccessFlag(Note note) {
+        return note.getAccess() == AccessType.PUBLIC ? true : false;
+    }
+
+    public String validateNote(Note note) {
+        String response = null;
+        if (note.getTitle().length() < 5 || note.getTitle().length() > 100) {
+            response = "Note's title length have to be between 5 and 100 characters including";
+        }
+        return response;
+    }
+
 }

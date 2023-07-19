@@ -17,34 +17,42 @@
         <h4 class="text-primary float-end">Hello, <span sec:authentication="name"></span> &emsp;</h4>
     </div><br>
     <h1>Add Note</h1>
-    <form method="post" th:action="@{/note/create}" th:object="${note}">
-        <div class="row">
-            <div class="col">
-                <label class="col-form-label">Title</label>
-            </div>
+    <div class="row">
+        <div class="col">
+            <h4 style="color: #000000;">My notes - <span th:text="${countNotes}"></span> pcs.&emsp;</h4>
         </div>
-        <div class="row">
-            <div class="col">
-                <input class="form-control" type="text" name="title" th:field="*{title}"/>
-            </div>
+        <div class="col">
+            <a href="/note/create" class="btn btn-primary">Create</a>
         </div>
-        <div class="row">
-            <div class="col">
-                <label class="col-form-label">Content</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <textarea class="form-control" name="content" th:field="*{content}"></textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <button type="submit" class="btn btn-success">Add note</button>
-                <a href="/note/list" class="btn btn-danger">Cancel</a>
-            </div>
-        </div>
-    </form>
+    </div>
+<!--    <form method="post" th:action="@{/note/create}" th:object="${note}">-->
+<!--        <div class="row">-->
+<!--            <div class="col">-->
+<!--                <label class="col-form-label">Title</label>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col">-->
+<!--                <input class="form-control" type="text" name="title" th:field="*{title}"/>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col">-->
+<!--                <label class="col-form-label">Content</label>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col">-->
+<!--                <textarea class="form-control" name="content" th:field="*{content}"></textarea>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col">-->
+<!--                <button type="submit" class="btn btn-success">Add note</button>-->
+<!--                <a href="/note/list" class="btn btn-danger">Cancel</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
     <br>
     <h1>Note List</h1>
     <div class="table-responsive">
@@ -73,6 +81,12 @@
                     <form method="post" th:action="@{/note/delete}">
                         <input type="hidden" name="id" th:value="${note.id}"/>
                         <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="get" th:action="@{/note/share}">
+                        <input type="hidden" name="id" th:value="${note.id}"/>
+                        <button type="submit" class="btn btn-link border-3 border-warning">Link</button>
                     </form>
                 </td>
             </tr>

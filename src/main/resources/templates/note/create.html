@@ -14,49 +14,68 @@
             <button type="submit" class="btn btn-info" style="text-align: right">Logout</button>
         </div>
     </form>
+
     <div sec:authorize="isAuthenticated()">
         <h4 class="text-primary float-end">Hello, <span sec:authentication="name"></span> &emsp;</h4>
     </div><br>
 
-    <h1>Create Note</h1>
+    <h1>Create new note</h1>
+
     <form method="post" th:action="@{/note/create}" th:object="${note}">
         <div class="row">
             <div class="col">
                 <label class="col-form-label">Title</label>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
                 <input class="form-control" type="text" name="title" th:field="*{title}"/>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
                 <label class="col-form-label">Content</label>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
                 <textarea class="form-control" rows="20" name="content" th:field="*{content}"></textarea>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
                 <label class="col-form-label">Access</label>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
-                <label class="col-form-label">Access</label>
+                <div class="form-check">
+                    <input id="formCheck-1" class="form-check-input" type="radio" name="access" th:value="PUBLIC">
+                    <label class="form-check-label" for="formCheck-1">Public</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check">
+                    <input id="formCheck-2" class="form-check-input" type="radio" name="access" th:value="PRIVATE">
+                    <label class="form-check-label" for="formCheck-2">Private</label>
+                </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
-                <button type="submit" class="btn btn-success">Add note</button>
+                <button type="submit" class="btn btn-success">Save</button>
                 <a href="/note/list" class="btn btn-danger">Cancel</a>
             </div>
         </div>
     </form>
 </div>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

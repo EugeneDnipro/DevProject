@@ -18,6 +18,7 @@ public class NoteController {
     public ModelAndView list() {
         ModelAndView result = new ModelAndView("note/list");
         result.addObject("notes", noteService.listAll().values());
+        result.addObject("countNotes", noteService.repository.count());
         result.addObject("note", new Note());
         return result;
     }
@@ -32,6 +33,8 @@ public class NoteController {
     public String edit(@RequestParam(name = "id") long id, Model model) {
         Note note = noteService.getById(id);
         model.addAttribute("note", note);
+        model.addAttribute("accessFlag", noteService.isAccessFlag(note));
+        System.out.println("noteEDIT.getAccess() = " + note.getAccess());
         return "note/edit";
     }
 
@@ -41,9 +44,15 @@ public class NoteController {
         return "redirect:/note/list";
     }
 
+    @GetMapping("/create")
+    public String showCreatePage(@ModelAttribute Note note) {
+        return "note/create";
+    }
+
     @PostMapping("/create")
     public String newNote(@ModelAttribute Note note, Model model) {
         model.addAttribute("note", note);
+
         noteService.add(note);
         return "redirect:/note/list";
     }
