@@ -6,6 +6,9 @@ import com.goit.DevProject.Repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -49,15 +52,35 @@ public class NoteService {
     }
 
     public boolean isAccessFlag(Note note) {
-        return note.getAccess() == AccessType.PUBLIC ? true : false;
+        return note.getAccess() == AccessType.PRIVATE ? true : false;
     }
 
     public String validateNote(Note note) {
-        String response = null;
-        if (note.getTitle().length() < 5 || note.getTitle().length() > 100) {
+        String response = "OK";
+        if ((note.getTitle().length() < 5 || note.getTitle().length() > 100) && (note.getContent().length() < 5 || note.getContent().length() > 10000)) {
+            response = "Note's title length have to be between 5 and 100 characters including" +
+                    "and note's content length have to be between 5 and 10000 characters including";
+        } else if (note.getTitle().length() < 5 || note.getTitle().length() > 100) {
             response = "Note's title length have to be between 5 and 100 characters including";
+        } else if (note.getContent().length() < 5 || note.getContent().length() > 10000) {
+            response = "Note's content length have to be between 5 and 10000 characters including";
         }
         return response;
+    }
+
+    public void copyLink(String url) {
+        String linkToCopy = "https://www.example.com"; // Замініть на ваше посилання
+
+        // Створюємо об'єкт StringSelection з текстом, який ми хочемо скопіювати
+        StringSelection stringSelection = new StringSelection(url);
+
+        System.setProperty("java.awt.headless", "false");
+
+        // Отримуємо об'єкт Clipboard
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        // Встановлюємо об'єкт StringSelection як вміст буфера обміну
+        clipboard.setContents(stringSelection, null);
     }
 
 }

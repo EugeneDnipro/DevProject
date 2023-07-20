@@ -57,14 +57,14 @@
         <div class="row">
             <div class="col">
                 <div class="form-check">
-                    <input id="formCheck-1" class="form-check-input" type="radio" name="access" th:value="PUBLIC" th:checked="${accessFlag}">
+                    <input id="formCheck-1" class="form-check-input" type="radio" name="access" th:value="PUBLIC" th:checked="${!accessFlag}">
                     <label class="form-check-label" for="formCheck-1">Public</label>
                 </div>
             </div>
 
             <div class="col">
                 <div class="form-check">
-                    <input id="formCheck-2" class="form-check-input" type="radio" name="access" th:value="PRIVATE" th:checked="${!accessFlag}">
+                    <input id="formCheck-2" class="form-check-input" type="radio" name="access" th:value="PRIVATE" th:checked="${accessFlag}">
                     <label class="form-check-label" for="formCheck-2">Private</label>
                 </div>
             </div>

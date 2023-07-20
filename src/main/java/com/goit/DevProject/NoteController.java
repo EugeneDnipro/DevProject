@@ -2,11 +2,13 @@ package com.goit.DevProject;
 
 import com.goit.DevProject.CrudServices.NoteService;
 import com.goit.DevProject.Entities.Note;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/note")
@@ -34,12 +36,15 @@ public class NoteController {
         Note note = noteService.getById(id);
         model.addAttribute("note", note);
         model.addAttribute("accessFlag", noteService.isAccessFlag(note));
-        System.out.println("noteEDIT.getAccess() = " + note.getAccess());
         return "note/edit";
     }
 
     @PostMapping("/edit")
-    public String save(@ModelAttribute Note note) {
+    public String save(@ModelAttribute Note note, RedirectAttributes redirectAttributes) {
+        if (!noteService.validateNote(note).equals("OK")){
+            redirectAttributes.addFlashAttribute("errorText", noteService.validateNote(note));
+            return "redirect:/note/error";
+        }
         noteService.update(note);
         return "redirect:/note/list";
     }
@@ -50,10 +55,38 @@ public class NoteController {
     }
 
     @PostMapping("/create")
-    public String newNote(@ModelAttribute Note note, Model model) {
+    public String newNote(@ModelAttribute Note note, Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("note", note);
-
+        if (!noteService.validateNote(note).equals("OK")){
+            redirectAttributes.addFlashAttribute("errorText", noteService.validateNote(note));
+            return "redirect:/note/error";
+        }
         noteService.add(note);
         return "redirect:/note/list";
+    }
+
+    @GetMapping("/error")
+    public String showErrorPage(@ModelAttribute Note note) {
+        return "note/error";
+    }
+
+    @PostMapping
+    @ResponseBody
+    public String getLink(@PathVariable("id") long id, Model model, HttpServletRequest request) {
+        Note note = noteService.getById(id);
+        model.addAttribute("note", note);
+        String fullUrl = request.getRequestURL().toString();
+        noteService.copyLink(fullUrl);
+        return "success";
+    }
+
+    @GetMapping("/share/{id}")
+    public String shareLink(@PathVariable("id") long id, Model model) {
+        Note note = noteService.getById(id);
+        model.addAttribute("note", note);
+        model.addAttribute("accessFlag", noteService.isAccessFlag(note));
+        if (note != null && !noteService.isAccessFlag(note))
+            return "note/share";
+        return "note/warning";
     }
 }
