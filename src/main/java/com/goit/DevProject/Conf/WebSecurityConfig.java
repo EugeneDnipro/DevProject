@@ -43,6 +43,7 @@ public class WebSecurityConfig {
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests((requests) -> {
                             requests
+                                    .requestMatchers(HttpMethod.GET, "/note/share/**").permitAll()
                                     .anyRequest()
                                     .authenticated();
                         }
